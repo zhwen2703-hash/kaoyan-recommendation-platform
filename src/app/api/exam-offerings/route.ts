@@ -5,6 +5,7 @@ import { getAdmissionSnapshot } from "@/lib/sync";
 import { findNetworkRatio } from "@/lib/network-ratios";
 import { findBackgroundReputation } from "@/lib/background-reputation";
 import { getSchoolTier } from "@/lib/school-tiers";
+import { findRetestLine } from "@/lib/retest-lines";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,9 @@ export async function GET(request: Request) {
         const math = url.searchParams.get("math") ?? "全部";
         const schoolTier = url.searchParams.get("schoolTier") ?? "全部";
         const background = url.searchParams.get("background") ?? "全部";
+        const maxRetestLine = Number(
+          url.searchParams.get("maxRetestLine") ?? "0",
+        );
         const maxRetestRatio = Number(
           url.searchParams.get("maxRetestRatio") ?? "0",
         );
@@ -42,6 +46,11 @@ export async function GET(request: Request) {
           const tier = getSchoolTier(
             item.schoolName,
             unit?.doubleFirstClass ?? false,
+          );
+          const retestLine = findRetestLine(
+            item.schoolName,
+            item.majorCode,
+            item.collegeName,
           );
           const enrollment2026 = parsePublishedEnrollment(
             item.plannedEnrollment,
@@ -76,6 +85,12 @@ export async function GET(request: Request) {
             backgroundReputationConfidence: reputation?.confidence ?? null,
             backgroundReputationSourceName: reputation?.sourceName ?? null,
             backgroundReputationSourceUrl: reputation?.sourceUrl ?? null,
+            retestLineReference: retestLine?.totalScore ?? null,
+            retestLineYear: retestLine?.year ?? null,
+            retestLineKind: retestLine?.kind ?? null,
+            retestLineConfidence: retestLine?.confidence ?? null,
+            retestLineSourceName: retestLine?.sourceName ?? null,
+            retestLineSourceUrl: retestLine?.sourceUrl ?? null,
           };
         });
         const filtered = enriched
@@ -106,6 +121,12 @@ export async function GET(request: Request) {
           .filter(
             (item) =>
               background === "全部" || item.backgroundReputation === background,
+          )
+          .filter(
+            (item) =>
+              !maxRetestLine ||
+              (item.retestLineReference !== null &&
+                item.retestLineReference <= maxRetestLine),
           )
           .filter(
             (item) =>

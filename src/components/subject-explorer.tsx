@@ -27,6 +27,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
   const [english, setEnglish] = useState("全部");
   const [math, setMath] = useState("全部");
   const [maxRetestRatio, setMaxRetestRatio] = useState("0");
+  const [maxRetestLine, setMaxRetestLine] = useState("0");
   const [schoolTier, setSchoolTier] = useState("全部");
   const [background, setBackground] = useState("全部");
   const [page, setPage] = useState(1);
@@ -63,6 +64,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
         english,
         math,
         maxRetestRatio,
+        maxRetestLine,
         schoolTier,
         background,
         page: String(targetPage),
@@ -144,6 +146,19 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
           <option value="2">复录比 ≤ 2.0</option>
         </select>
         <select
+          value={maxRetestLine}
+          onChange={(event) => setMaxRetestLine(event.target.value)}
+          className="rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold"
+        >
+          <option value="0">专业复试线不限</option>
+          <option value="500">仅看已采集复试线</option>
+          <option value="280">复试线 ≤ 280</option>
+          <option value="300">复试线 ≤ 300</option>
+          <option value="320">复试线 ≤ 320</option>
+          <option value="340">复试线 ≤ 340</option>
+          <option value="360">复试线 ≤ 360</option>
+        </select>
+        <select
           value={schoolTier}
           onChange={(event) => setSchoolTier(event.target.value)}
           className="rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold"
@@ -211,7 +226,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
             className="mt-4 overflow-x-auto rounded-t-xl border border-b-0 border-emerald-100 bg-emerald-50/60"
             aria-label="表格顶部横向滚动条"
           >
-            <div className="h-3 min-w-[1900px]" />
+            <div className="h-3 min-w-[2040px]" />
           </div>
           <div
             ref={tableScrollRef}
@@ -222,7 +237,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
             }}
             className="overflow-x-auto rounded-b-xl border border-emerald-100"
           >
-            <table className="w-full min-w-[1900px] text-left text-sm">
+            <table className="w-full min-w-[2040px] text-left text-sm">
               <thead className="bg-emerald-50 text-xs font-black text-emerald-900">
                 <tr>
                   {[
@@ -235,6 +250,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
                     "2026拟招生",
                     "2027拟招生",
                     "扩招变化",
+                    "专业复试线",
                     "2026复录比",
                     "初试科目",
                     "来源",
@@ -309,6 +325,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
                           item.enrollment2027 != null
                         }
                       />
+                      <RetestLineCell item={item} />
                       <RatioCell
                         value={item.retestAdmissionRatio2026}
                         sourceUrl={item.retestAdmissionRatioSourceUrl}
@@ -476,6 +493,42 @@ function ChangeCell({
       </td>
     );
   return <td className="px-4 py-3 font-black text-slate-600">持平</td>;
+}
+
+function RetestLineCell({ item }: { item: MajorOffering }) {
+  if (
+    item.retestLineReference === null ||
+    item.retestLineReference === undefined
+  )
+    return (
+      <td className="px-4 py-3 text-slate-400">
+        <span className="whitespace-nowrap">未采集</span>
+        <p className="mt-1 text-xs">等待专业线来源</p>
+      </td>
+    );
+  return (
+    <td className="px-4 py-3">
+      <span className="text-lg font-black text-blue-700">
+        {item.retestLineReference}
+      </span>
+      <p className="mt-1 text-xs font-bold text-slate-600">
+        {item.retestLineYear} · {item.retestLineKind}
+      </p>
+      <p className="mt-1 text-xs text-slate-500">
+        {item.retestLineConfidence}置信度
+      </p>
+      {item.retestLineSourceUrl && (
+        <a
+          href={item.retestLineSourceUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-1 block text-xs font-bold text-blue-700"
+        >
+          {item.retestLineSourceName}
+        </a>
+      )}
+    </td>
+  );
 }
 
 function RatioCell({
