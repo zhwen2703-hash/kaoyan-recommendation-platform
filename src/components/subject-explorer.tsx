@@ -499,13 +499,23 @@ function RetestLineCell({ item }: { item: MajorOffering }) {
   if (
     item.retestLineReference === null ||
     item.retestLineReference === undefined
-  )
+  ) {
+    const query = `${item.schoolName} ${item.collegeName} ${item.majorCode} ${item.majorName} 2026 复试分数线`;
     return (
       <td className="px-4 py-3 text-slate-400">
         <span className="whitespace-nowrap">未采集</span>
-        <p className="mt-1 text-xs">等待专业线来源</p>
+        <p className="mt-1 text-xs">等待专业线核验</p>
+        <a
+          href={`https://www.so.com/s?q=${encodeURIComponent(query)}`}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-2 inline-flex whitespace-nowrap text-xs font-bold text-blue-700"
+        >
+          联网查询该专业
+        </a>
       </td>
     );
+  }
   return (
     <td className="px-4 py-3">
       <span className="text-lg font-black text-blue-700">
