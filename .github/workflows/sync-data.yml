@@ -36,3 +36,9 @@ jobs:
           git add data/admission-units.json data/408-offerings.json
           git diff --cached --quiet || git commit -m "data: refresh official admission snapshots"
           git push
+      - name: Deploy refreshed data to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: npx vercel --prod --yes --token="$VERCEL_TOKEN"

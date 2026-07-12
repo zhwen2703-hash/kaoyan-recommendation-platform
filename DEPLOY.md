@@ -13,9 +13,9 @@
 ## 首次发布
 
 1. 在 GitHub 创建公开仓库并推送本项目。
-2. 在 Vercel 使用 GitHub 登录，导入该仓库。
-3. Framework Preset 选择 Next.js，其余保持默认并部署。
-4. 在 GitHub Actions 页面手动运行一次 `Sync official admission data` 验证自动更新。
+2. 在 Vercel 创建项目并完成首次部署。
+3. 在 GitHub Secrets 配置 `VERCEL_TOKEN`、`VERCEL_ORG_ID`、`VERCEL_PROJECT_ID`。
+4. 普通代码推送由 `Deploy website` 发布；每日数据同步完成后也会直接发布。
 
 ## 限制
 
