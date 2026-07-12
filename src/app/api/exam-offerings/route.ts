@@ -6,6 +6,8 @@ import { findNetworkRatio } from "@/lib/network-ratios";
 import { findBackgroundReputation } from "@/lib/background-reputation";
 import { getSchoolTier } from "@/lib/school-tiers";
 import { findRetestLine, getNationalRetestLine } from "@/lib/retest-lines";
+import { scoreOffering } from "@/lib/recommendation";
+import type { MajorOffering } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +29,14 @@ export async function GET(request: Request) {
         const maxRetestLine = Number(
           url.searchParams.get("maxRetestLine") ?? "0",
         );
+        const expectedScoreRaw = Number(
+          url.searchParams.get("expectedScore") ?? "0",
+        );
+        const expectedScore =
+          expectedScoreRaw >= 200 && expectedScoreRaw <= 500
+            ? expectedScoreRaw
+            : null;
+        const sortMode = url.searchParams.get("sort") ?? "recommended";
         const maxRetestRatio = Number(
           url.searchParams.get("maxRetestRatio") ?? "0",
         );
@@ -54,7 +64,7 @@ export async function GET(request: Request) {
             item.plannedEnrollment,
           );
           const enrollment2027 = item.enrollment2027 ?? null;
-          return {
+          const enrichedItem: MajorOffering = {
             ...item,
             enrollment2026,
             enrollment2027,
@@ -90,6 +100,10 @@ export async function GET(request: Request) {
             retestLineSourceName: retestLine?.sourceName ?? null,
             retestLineSourceUrl: retestLine?.sourceUrl ?? null,
           };
+          return {
+            ...enrichedItem,
+            ...scoreOffering(enrichedItem, expectedScore),
+          };
         });
         const filtered = enriched
           .filter((item) => region === "全部" || item.region === region)
@@ -123,13 +137,13 @@ export async function GET(request: Request) {
           .filter(
             (item) =>
               !maxRetestLine ||
-              (item.retestLineReference !== null &&
+              (item.retestLineReference != null &&
                 item.retestLineReference <= maxRetestLine),
           )
           .filter(
             (item) =>
               !maxRetestRatio ||
-              (item.retestAdmissionRatio2026 !== null &&
+              (item.retestAdmissionRatio2026 != null &&
                 item.retestAdmissionRatio2026 <= maxRetestRatio),
           )
           .filter(
@@ -138,6 +152,12 @@ export async function GET(request: Request) {
               `${item.schoolName} ${item.majorName} ${item.collegeName}`
                 .toLowerCase()
                 .includes(keyword),
+          )
+          .sort((a, b) =>
+            sortMode === "recommended"
+              ? b.recommendationScore - a.recommendationScore ||
+                b.enrollment2026! - a.enrollment2026!
+              : a.schoolName.localeCompare(b.schoolName, "zh-CN"),
           );
         return NextResponse.json(
           {
@@ -154,6 +174,8 @@ export async function GET(request: Request) {
             sourceUrl: snapshot.sourceUrl,
             syncedAt: snapshot.syncedAt,
             fullSnapshot: true,
+            expectedScore,
+            sort: sortMode,
             refreshing: snapshot.refreshing ?? false,
           },
           { headers: { "Cache-Control": "no-store" } },

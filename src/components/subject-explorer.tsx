@@ -30,6 +30,8 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
   const [maxRetestLine, setMaxRetestLine] = useState("0");
   const [schoolTier, setSchoolTier] = useState("全部");
   const [background, setBackground] = useState("全部");
+  const [expectedScore, setExpectedScore] = useState("");
+  const [sortMode, setSortMode] = useState("recommended");
   const [page, setPage] = useState(1);
   const [data, setData] = useState<SubjectResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -67,6 +69,8 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
         maxRetestLine,
         schoolTier,
         background,
+        expectedScore,
+        sort: sortMode,
         page: String(targetPage),
       });
       const response = await fetch(`/api/exam-offerings?${params}`, {
@@ -179,6 +183,30 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
           <option value="controversial">网络口碑存在争议</option>
           <option value="unknown">信息不足</option>
         </select>
+        <label className="flex items-center rounded-xl border border-emerald-100 bg-white px-3">
+          <span className="mr-2 whitespace-nowrap text-sm font-bold text-slate-500">
+            预期总分
+          </span>
+          <input
+            value={expectedScore}
+            onChange={(event) =>
+              setExpectedScore(
+                event.target.value.replace(/\D/g, "").slice(0, 3),
+              )
+            }
+            inputMode="numeric"
+            placeholder="如 340"
+            className="min-w-0 flex-1 py-3 text-sm font-black outline-none"
+          />
+        </label>
+        <select
+          value={sortMode}
+          onChange={(event) => setSortMode(event.target.value)}
+          className="rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold"
+        >
+          <option value="recommended">更容易考进优先</option>
+          <option value="school">按学校名称排序</option>
+        </select>
         <button
           onClick={() => search(1)}
           disabled={loading}
@@ -216,6 +244,9 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
               专业范围：{data.coveredMajors.map((item) => item.name).join("、")}
             </p>
           </div>
+          <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
+            推荐指数不是录取概率。考研先填志愿后考试，缺少专业线或复录比的记录一律按低置信度和“冲”处理；定校前必须打开复试线、招生目录和复录比来源核验。
+          </div>
           <div
             ref={topScrollRef}
             onScroll={(event) => {
@@ -226,7 +257,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
             className="mt-4 overflow-x-auto rounded-t-xl border border-b-0 border-emerald-100 bg-emerald-50/60"
             aria-label="表格顶部横向滚动条"
           >
-            <div className="h-3 min-w-[1800px]" />
+            <div className="h-3 min-w-[1960px]" />
           </div>
           <div
             ref={tableScrollRef}
@@ -237,11 +268,12 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
             }}
             className="overflow-x-auto rounded-b-xl border border-emerald-100"
           >
-            <table className="w-full min-w-[1800px] table-fixed text-left text-sm">
+            <table className="w-full min-w-[1960px] table-fixed text-left text-sm">
               <thead className="bg-emerald-50 text-xs font-black text-emerald-900">
                 <tr>
                   {[
                     "学校及层级",
+                    "推荐指数",
                     "本科背景口碑",
                     "专业",
                     "类型",
@@ -297,6 +329,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
                             )}
                         </div>
                       </td>
+                      <RecommendationCell item={item} />
                       <BackgroundCell item={item} />
                       <td className="px-4 py-3">
                         <b>({item.majorCode})</b> {item.majorName}
@@ -392,6 +425,39 @@ function SchoolTag({ children }: { children: React.ReactNode }) {
     <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-black text-amber-700">
       {children}
     </span>
+  );
+}
+
+function RecommendationCell({ item }: { item: MajorOffering }) {
+  const riskStyle =
+    item.riskLevel === "保"
+      ? "bg-emerald-100 text-emerald-700"
+      : item.riskLevel === "稳"
+        ? "bg-blue-100 text-blue-700"
+        : "bg-orange-100 text-orange-700";
+  return (
+    <td className="w-44 px-4 py-3 align-top">
+      <div className="flex items-center gap-2">
+        <span className="text-2xl font-black text-emerald-700">
+          {item.recommendationScore ?? "-"}
+        </span>
+        <span
+          className={`rounded-full px-2 py-1 text-xs font-black ${riskStyle}`}
+        >
+          {item.riskLevel ?? "待评估"}
+        </span>
+      </div>
+      <p className="mt-1 text-xs text-slate-500">
+        {item.recommendationConfidence ?? "低"}置信度
+      </p>
+      <div className="mt-2 flex max-w-44 flex-col gap-1">
+        {item.recommendationReasons?.map((reason) => (
+          <span key={reason} className="text-xs leading-4 text-slate-600">
+            {reason}
+          </span>
+        ))}
+      </div>
+    </td>
   );
 }
 

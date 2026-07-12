@@ -64,6 +64,10 @@ export type MajorOffering = {
   retestLineConfidence?: "高" | "中" | "低" | null;
   retestLineSourceName?: string | null;
   retestLineSourceUrl?: string | null;
+  recommendationScore?: number;
+  riskLevel?: "冲" | "稳" | "保";
+  recommendationReasons?: string[];
+  recommendationConfidence?: "高" | "中" | "低";
   graduateSchool?: boolean;
   selfMarking?: boolean;
   doubleFirstClass?: boolean;
