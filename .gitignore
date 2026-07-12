@@ -43,3 +43,5 @@ next-env.d.ts
 # resumable local crawler state
 /data/408-progress.json
 /data/.408-sync.lock
+
+.vercel
