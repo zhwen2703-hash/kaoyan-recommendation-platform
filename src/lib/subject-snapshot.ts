@@ -2,6 +2,7 @@ import { spawn } from "node:child_process";
 import { readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { MajorOffering } from "./types";
+import bundledSnapshot from "../../data/408-offerings.json";
 
 export type SubjectSnapshot = {
   source: string; sourceUrl: string; syncedAt: string; subjectCode: string;
@@ -14,6 +15,7 @@ const lockPath = path.join(process.cwd(), "data", ".408-sync.lock");
 const maxAgeMs = 60 * 60 * 1000;
 
 export async function get408Snapshot() {
+  if (process.env.VERCEL) return bundledSnapshot as unknown as SubjectSnapshot;
   const fileStat = await stat(snapshotPath);
   const refreshing = Date.now() - fileStat.mtimeMs >= maxAgeMs ? await triggerBackgroundRefresh() : await hasActiveLock();
   return { ...JSON.parse(await readFile(snapshotPath, "utf8")) as SubjectSnapshot, refreshing };

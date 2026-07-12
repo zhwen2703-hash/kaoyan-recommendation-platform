@@ -2,12 +2,14 @@ import * as cheerio from "cheerio";
 import { mkdir, readFile, rename, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { AdmissionSnapshot, AdmissionUnit } from "./types";
+import bundledAdmissionSnapshot from "../../data/admission-units.json";
 
 const SOURCE_URL = "https://yz.chsi.com.cn/sch/";
 const SNAPSHOT_PATH = path.join(process.cwd(), "data", "admission-units.json");
 const MAX_AGE_MS = 6 * 60 * 60 * 1000;
 
 export async function getAdmissionSnapshot(options: { force?: boolean } = {}): Promise<AdmissionSnapshot> {
+  if (process.env.VERCEL) return bundledAdmissionSnapshot as unknown as AdmissionSnapshot;
   if (!options.force) {
     try {
       const fileStat = await stat(SNAPSHOT_PATH);
