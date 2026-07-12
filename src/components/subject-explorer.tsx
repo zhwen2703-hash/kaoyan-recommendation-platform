@@ -32,6 +32,8 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
   const [background, setBackground] = useState("全部");
   const [expectedScore, setExpectedScore] = useState("");
   const [sortMode, setSortMode] = useState("recommended");
+  const [expansion, setExpansion] = useState("全部");
+  const [minEnrollment, setMinEnrollment] = useState("0");
   const [page, setPage] = useState(1);
   const [data, setData] = useState<SubjectResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -71,6 +73,8 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
         background,
         expectedScore,
         sort: sortMode,
+        expansion,
+        minEnrollment,
         page: String(targetPage),
       });
       const response = await fetch(`/api/exam-offerings?${params}`, {
@@ -206,6 +210,30 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
         >
           <option value="recommended">更容易考进优先</option>
           <option value="school">按学校名称排序</option>
+        </select>
+        <select
+          value={expansion}
+          onChange={(event) => setExpansion(event.target.value)}
+          className="rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold"
+        >
+          <option value="全部">扩招状态不限</option>
+          <option value="扩招">仅看扩招</option>
+          <option value="持平">仅看招生持平</option>
+          <option value="缩招">仅看缩招</option>
+          <option value="未公布">2027人数未公布</option>
+        </select>
+        <select
+          value={minEnrollment}
+          onChange={(event) => setMinEnrollment(event.target.value)}
+          className="rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold"
+        >
+          <option value="0">招生人数不限</option>
+          <option value="5">拟招生 ≥ 5人</option>
+          <option value="10">拟招生 ≥ 10人</option>
+          <option value="20">拟招生 ≥ 20人</option>
+          <option value="30">拟招生 ≥ 30人</option>
+          <option value="50">拟招生 ≥ 50人</option>
+          <option value="100">拟招生 ≥ 100人</option>
         </select>
         <button
           onClick={() => search(1)}

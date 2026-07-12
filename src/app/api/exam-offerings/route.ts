@@ -37,6 +37,11 @@ export async function GET(request: Request) {
             ? expectedScoreRaw
             : null;
         const sortMode = url.searchParams.get("sort") ?? "recommended";
+        const expansion = url.searchParams.get("expansion") ?? "全部";
+        const minEnrollment = Math.max(
+          0,
+          Number(url.searchParams.get("minEnrollment") ?? "0"),
+        );
         const maxRetestRatio = Number(
           url.searchParams.get("maxRetestRatio") ?? "0",
         );
@@ -133,6 +138,20 @@ export async function GET(request: Request) {
           .filter(
             (item) =>
               background === "全部" || item.backgroundReputation === background,
+          )
+          .filter((item) => {
+            if (expansion === "全部") return true;
+            if (expansion === "未公布") return item.enrollment2027 == null;
+            if (item.enrollmentChange == null) return false;
+            if (expansion === "扩招") return item.enrollmentChange > 0;
+            if (expansion === "缩招") return item.enrollmentChange < 0;
+            return item.enrollmentChange === 0;
+          })
+          .filter(
+            (item) =>
+              !minEnrollment ||
+              (item.enrollment2027 ?? item.enrollment2026 ?? 0) >=
+                minEnrollment,
           )
           .filter(
             (item) =>
