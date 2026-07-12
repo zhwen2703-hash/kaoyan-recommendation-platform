@@ -226,7 +226,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
             className="mt-4 overflow-x-auto rounded-t-xl border border-b-0 border-emerald-100 bg-emerald-50/60"
             aria-label="表格顶部横向滚动条"
           >
-            <div className="h-3 min-w-[2040px]" />
+            <div className="h-3 min-w-[1800px]" />
           </div>
           <div
             ref={tableScrollRef}
@@ -237,7 +237,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
             }}
             className="overflow-x-auto rounded-b-xl border border-emerald-100"
           >
-            <table className="w-full min-w-[2040px] text-left text-sm">
+            <table className="w-full min-w-[1800px] table-fixed text-left text-sm">
               <thead className="bg-emerald-50 text-xs font-black text-emerald-900">
                 <tr>
                   {[
@@ -312,7 +312,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
                         </span>
                       </td>
                       <td className="px-4 py-3">{item.collegeName}</td>
-                      <td className="px-4 py-3">{item.directionName}</td>
+                      <DirectionCell value={item.directionName} />
                       <EnrollmentCell
                         value={item.enrollment2026}
                         detail={item.plannedEnrollment}
@@ -469,6 +469,27 @@ function EnrollmentCell({
       {detail && (
         <p className="mt-1 max-w-40 text-xs text-slate-500">{detail}</p>
       )}
+    </td>
+  );
+}
+
+function DirectionCell({ value }: { value: string }) {
+  const directions = value
+    .split(/[、；;]/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+  return (
+    <td className="w-56 px-4 py-3 align-top">
+      <div className="flex max-w-56 flex-col gap-1.5">
+        {directions.map((direction, index) => (
+          <span
+            key={`${direction}-${index}`}
+            className="break-words leading-5 text-slate-700"
+          >
+            {direction}
+          </span>
+        ))}
+      </div>
     </td>
   );
 }
