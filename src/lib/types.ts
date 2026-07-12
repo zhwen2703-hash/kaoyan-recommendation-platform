@@ -60,7 +60,7 @@ export type MajorOffering = {
   admittedCount2026?: number | null;
   retestLineReference?: number | null;
   retestLineYear?: 2026 | 2025 | 2024 | null;
-  retestLineKind?: "专业线" | "网络参考" | null;
+  retestLineKind?: "专业线" | "网络参考" | "国家线兜底" | null;
   retestLineConfidence?: "高" | "中" | "低" | null;
   retestLineSourceName?: string | null;
   retestLineSourceUrl?: string | null;

@@ -5,7 +5,7 @@ import { getAdmissionSnapshot } from "@/lib/sync";
 import { findNetworkRatio } from "@/lib/network-ratios";
 import { findBackgroundReputation } from "@/lib/background-reputation";
 import { getSchoolTier } from "@/lib/school-tiers";
-import { findRetestLine } from "@/lib/retest-lines";
+import { findRetestLine, getNationalRetestLine } from "@/lib/retest-lines";
 
 export const dynamic = "force-dynamic";
 
@@ -47,11 +47,9 @@ export async function GET(request: Request) {
             item.schoolName,
             unit?.doubleFirstClass ?? false,
           );
-          const retestLine = findRetestLine(
-            item.schoolName,
-            item.majorCode,
-            item.collegeName,
-          );
+          const retestLine =
+            findRetestLine(item.schoolName, item.majorCode, item.collegeName) ??
+            getNationalRetestLine(item.majorCode, item.region);
           const enrollment2026 = parsePublishedEnrollment(
             item.plannedEnrollment,
           );

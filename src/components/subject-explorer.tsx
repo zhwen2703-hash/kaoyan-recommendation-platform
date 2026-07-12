@@ -524,6 +524,11 @@ function RetestLineCell({ item }: { item: MajorOffering }) {
       <p className="mt-1 text-xs font-bold text-slate-600">
         {item.retestLineYear} · {item.retestLineKind}
       </p>
+      {item.retestLineKind === "国家线兜底" && (
+        <p className="mt-1 max-w-40 text-xs text-amber-700">
+          最低复试门槛，不代表该校实际专业线
+        </p>
+      )}
       <p className="mt-1 text-xs text-slate-500">
         {item.retestLineConfidence}置信度
       </p>
