@@ -332,7 +332,6 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
                   {[
                     "学校及层级",
                     "推荐指数",
-                    "本科背景口碑",
                     "专业",
                     "类型",
                     "院系",
@@ -343,6 +342,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
                     "专业复试线",
                     "2026复录比",
                     "初试科目",
+                    "本科背景口碑",
                     "来源",
                   ].map((head) => (
                     <th
@@ -388,7 +388,6 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
                         </div>
                       </td>
                       <RecommendationCell item={item} />
-                      <BackgroundCell item={item} />
                       <td className="px-4 py-3">
                         <b>({item.majorCode})</b> {item.majorName}
                         <p className="text-xs text-slate-500">
@@ -437,6 +436,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
                           ))}
                         </div>
                       </td>
+                      <BackgroundCell item={item} />
                       <td className="px-4 py-3">
                         <a
                           href={item.sourceUrl}
