@@ -2,7 +2,7 @@ name: Sync official admission data
 
 on:
   schedule:
-    - cron: "20 18 * * *"
+    - cron: "20 0,6,12,18 * * *"
   workflow_dispatch:
 
 permissions:
@@ -23,17 +23,19 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - name: Preserve verified baseline
+        run: cp data/408-offerings.json data/.previous-408.json
       - name: Sync admission units
         run: npm run sync:data
       - name: Sync strict 408 offerings
         run: npm run sync:408 -- --force
       - name: Validate snapshot
-        run: npm test
+        run: npm run validate:snapshot && npm test
       - name: Commit changed snapshots
         run: |
           git config user.name "admission-data-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/admission-units.json data/408-offerings.json
+          git add data/admission-units.json data/408-offerings.json data/snapshots
           git diff --cached --quiet || git commit -m "data: refresh official admission snapshots"
           git push
       - name: Deploy refreshed data to Vercel

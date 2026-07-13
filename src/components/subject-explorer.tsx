@@ -19,6 +19,14 @@ type SubjectResponse = {
   syncedAt: string;
   fullSnapshot?: boolean;
   refreshing?: boolean;
+  dataVersion: string;
+  snapshotHash: string;
+  snapshotStatus: "verified";
+  algorithmVersion: string;
+  queryHash: string;
+  summary: { trusted: number; reach: number; stable: number; safe: number; pending: number };
+  topTen: MajorOffering[];
+  pendingCandidates: MajorOffering[];
 };
 
 export function SubjectExplorer({ regions }: { regions: string[] }) {
@@ -29,11 +37,13 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
   const [maxRetestRatio, setMaxRetestRatio] = useState("0");
   const [maxRetestLine, setMaxRetestLine] = useState("0");
   const [schoolTier, setSchoolTier] = useState("全部");
-  const [background, setBackground] = useState("全部");
   const [expectedScore, setExpectedScore] = useState("");
   const [sortMode, setSortMode] = useState("recommended");
   const [expansion, setExpansion] = useState("全部");
   const [minEnrollment, setMinEnrollment] = useState("0");
+  const [degreeType, setDegreeType] = useState("全部");
+  const [studyMode, setStudyMode] = useState("全部");
+  const [advancedOpen, setAdvancedOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [data, setData] = useState<SubjectResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -70,11 +80,12 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
         maxRetestRatio,
         maxRetestLine,
         schoolTier,
-        background,
         expectedScore,
         sort: sortMode,
         expansion,
         minEnrollment,
+        degreeType,
+        studyMode,
         page: String(targetPage),
       });
       const response = await fetch(`/api/exam-offerings?${params}`, {
@@ -106,7 +117,15 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
           </p>
         </div>
       </div>
-      <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+      <button
+        type="button"
+        aria-expanded={advancedOpen}
+        onClick={() => setAdvancedOpen((value) => !value)}
+        className="mt-4 rounded-lg border border-emerald-200 px-3 py-2 text-xs font-black text-emerald-700"
+      >
+        {advancedOpen ? "\u6536\u8d77\u9ad8\u7ea7\u7b5b\u9009" : "\u5c55\u5f00\u9ad8\u7ea7\u7b5b\u9009\uff08\u590d\u5f55\u6bd4\u3001\u590d\u8bd5\u7ebf\u3001\u62db\u751f\u4eba\u6570\u3001\u6269\u62db\uff09"}
+      </button>
+      <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
         <select
           value={subjectCode}
           onChange={(event) => setSubjectCode(event.target.value)}
@@ -145,7 +164,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
         <select
           value={maxRetestRatio}
           onChange={(event) => setMaxRetestRatio(event.target.value)}
-          className="rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold"
+          className={`${advancedOpen ? "" : "hidden"} rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold`}
         >
           <option value="0">复录比不限</option>
           <option value="99">仅看已采集复录比</option>
@@ -156,7 +175,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
         <select
           value={maxRetestLine}
           onChange={(event) => setMaxRetestLine(event.target.value)}
-          className="rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold"
+          className={`${advancedOpen ? "" : "hidden"} rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold`}
         >
           <option value="0">专业复试线不限</option>
           <option value="500">仅看已采集复试线</option>
@@ -177,16 +196,6 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
           <option value="双一流">双一流院校</option>
           <option value="普通">普通院校</option>
         </select>
-        <select
-          value={background}
-          onChange={(event) => setBackground(event.target.value)}
-          className="rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold"
-        >
-          <option value="全部">本科背景口碑不限</option>
-          <option value="friendly">网络口碑相对友好</option>
-          <option value="controversial">网络口碑存在争议</option>
-          <option value="unknown">信息不足</option>
-        </select>
         <label className="flex items-center rounded-xl border border-emerald-100 bg-white px-3">
           <span className="mr-2 whitespace-nowrap text-sm font-bold text-slate-500">
             预期总分
@@ -206,7 +215,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
         <select
           value={sortMode}
           onChange={(event) => setSortMode(event.target.value)}
-          className="rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold"
+          className={`${advancedOpen ? "" : "hidden"} rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold`}
         >
           <option value="recommended">更容易考进优先</option>
           <option value="school">按学校名称排序</option>
@@ -214,7 +223,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
         <select
           value={expansion}
           onChange={(event) => setExpansion(event.target.value)}
-          className="rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold"
+          className={`${advancedOpen ? "" : "hidden"} rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold`}
         >
           <option value="全部">扩招状态不限</option>
           <option value="扩招">仅看扩招</option>
@@ -225,7 +234,7 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
         <select
           value={minEnrollment}
           onChange={(event) => setMinEnrollment(event.target.value)}
-          className="rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold"
+          className={`${advancedOpen ? "" : "hidden"} rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold`}
         >
           <option value="0">招生人数不限</option>
           <option value="5">拟招生 ≥ 5人</option>
@@ -234,6 +243,26 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
           <option value="30">拟招生 ≥ 30人</option>
           <option value="50">拟招生 ≥ 50人</option>
           <option value="100">拟招生 ≥ 100人</option>
+        </select>
+        <select
+          value={degreeType}
+          onChange={(event) => setDegreeType(event.target.value)}
+          className={`${advancedOpen ? "" : "hidden"} rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold`}
+          aria-label="学位类型"
+        >
+          <option value="全部">学硕/专硕不限</option>
+          <option value="学术学位">学硕</option>
+          <option value="专业学位">专硕</option>
+        </select>
+        <select
+          value={studyMode}
+          onChange={(event) => setStudyMode(event.target.value)}
+          className={`${advancedOpen ? "" : "hidden"} rounded-xl border border-emerald-100 bg-white px-3 py-3 text-sm font-bold`}
+          aria-label="学习方式"
+        >
+          <option value="全部">全日制/非全日制不限</option>
+          <option value="全日制">全日制</option>
+          <option value="非全日制">非全日制</option>
         </select>
         <button
           onClick={() => search(1)}
@@ -273,8 +302,9 @@ export function SubjectExplorer({ regions }: { regions: string[] }) {
             </p>
           </div>
           <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
-            推荐指数不是录取概率。考研先填志愿后考试，缺少专业线或复录比的记录一律按低置信度和“冲”处理；定校前必须打开复试线、招生目录和复录比来源核验。
+            推荐指数不是录取概率。考研先填志愿后考试，只有专业/学院粒度已核验证据才可进入可信 Top 10；国家线、冲突数据或关键口径缺失会标为待核验。
           </div>
+          <TrustedRecommendations data={data} />
           <div
             ref={topScrollRef}
             onScroll={(event) => {
@@ -454,6 +484,54 @@ function SchoolTag({ children }: { children: React.ReactNode }) {
       {children}
     </span>
   );
+}
+
+function TrustedRecommendations({ data }: { data: SubjectResponse }) {
+  const labels = { reach: "\u51b2\u523a", stable: "\u7a33\u59a5", safe: "\u4fdd\u5e95", pending: "\u5f85\u6838\u9a8c" } as const;
+  return (
+    <section className="mt-5" aria-labelledby="trusted-recommendations">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h3 id="trusted-recommendations" className="text-lg font-black text-slate-900">可信推荐 Top 10</h3>
+          <p className="mt-1 text-xs text-slate-500">仅收录专业/学院粒度已核验证据；同校最多 2 个专业。推荐分不是录取概率。</p>
+        </div>
+        <div className="flex flex-wrap gap-2 text-xs font-bold">
+          <span className="rounded-md bg-orange-50 px-2 py-1 text-orange-700">冲 {data.summary.reach}</span>
+          <span className="rounded-md bg-blue-50 px-2 py-1 text-blue-700">稳 {data.summary.stable}</span>
+          <span className="rounded-md bg-emerald-50 px-2 py-1 text-emerald-700">保 {data.summary.safe}</span>
+          <span className="rounded-md bg-slate-100 px-2 py-1 text-slate-600">待核验 {data.summary.pending}</span>
+        </div>
+      </div>
+      {data.topTen.length ? (
+        <div className="mt-3 grid gap-3 lg:grid-cols-2">
+          {data.topTen.map((item) => (
+            <article key={`top-${item.id}`} className="rounded-lg border border-emerald-200 bg-white p-4 shadow-sm">
+              <header className="flex items-start justify-between gap-3">
+                <div className="min-w-0"><h4 className="font-black text-slate-900">{item.schoolName}</h4><p className="mt-1 break-words text-xs text-slate-500">{item.collegeName} · {item.majorCode} {item.majorName}</p></div>
+                <span className="shrink-0 rounded-md bg-emerald-50 px-2 py-1 text-xs font-black text-emerald-700">{labels[item.recommendation?.riskLevel ?? "pending"]}</span>
+              </header>
+              <div className="mt-3 grid grid-cols-4 gap-2 text-center text-xs">
+                <ScoreMetric label="匹配" value={item.recommendation?.matchScore} />
+                <ScoreMetric label="竞争" value={item.recommendation?.competitionScore} />
+                <ScoreMetric label="置信" value={item.recommendation?.confidenceScore} />
+                <ScoreMetric label="综合" value={item.recommendation?.finalScore} strong />
+              </div>
+              <ul className="mt-3 space-y-1 text-xs leading-5 text-slate-600">
+                {item.recommendationReasonsDetailed?.slice(0, 3).map((reason) => <li key={reason.ruleCode}>· {reason.text}</li>)}
+              </ul>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-3 rounded-lg border border-dashed border-slate-300 bg-slate-50 p-5 text-sm text-slate-600">当前条件下没有足够证据的可信 Top 10，不会用国家线或低可信估算强行补齐。</div>
+      )}
+      <p className="mt-2 break-all text-[11px] text-slate-400">数据 {data.dataVersion} · 算法 {data.algorithmVersion} · 查询 {data.queryHash}</p>
+    </section>
+  );
+}
+
+function ScoreMetric({ label, value, strong = false }: { label: string; value?: number; strong?: boolean }) {
+  return <div className={`rounded-md px-2 py-2 ${strong ? "bg-emerald-600 text-white" : "bg-slate-50 text-slate-600"}`}><b className="block text-base">{value ?? "-"}</b>{label}</div>;
 }
 
 function RecommendationCell({ item }: { item: MajorOffering }) {

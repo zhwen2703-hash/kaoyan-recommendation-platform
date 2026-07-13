@@ -147,7 +147,7 @@ export function Dashboard() {
             {syncNotice}
           </div>
         )}
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+        <section className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
           <Stat
             label="招生单位总数"
             value={String(data?.catalogCount ?? "-")}
@@ -361,7 +361,7 @@ export function Dashboard() {
               </p>
               <p>
                 公网版本由 GitHub Actions
-                每日自动同步并重新部署；本地版本可点击按钮强制抓取。云端不会写入只读文件系统。
+                每 6 小时自动同步、校验并重新部署；本地版本可点击按钮强制抓取。云端不会写入只读文件系统。
               </p>
               <a
                 href={data?.sourceUrl}
@@ -389,12 +389,12 @@ function Stat({
   icon: typeof Database;
 }) {
   return (
-    <div className="rounded-2xl border border-blue-100 bg-white p-4 shadow-sm">
+    <div className="rounded-lg border border-blue-100 bg-white p-3 shadow-sm sm:p-4">
       <div className="flex items-center justify-between">
         <p className="text-sm font-bold text-slate-500">{label}</p>
         <Icon className="text-blue-600" />
       </div>
-      <p className="mt-3 text-3xl font-black">{value}</p>
+      <p className="mt-2 text-2xl font-black sm:mt-3 sm:text-3xl">{value}</p>
     </div>
   );
 }

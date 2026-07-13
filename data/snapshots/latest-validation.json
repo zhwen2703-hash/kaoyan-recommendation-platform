@@ -1,0 +1,13 @@
+{
+  "publishable": true,
+  "errors": [],
+  "warnings": [
+    "5 published plan values are nonpositive and will be treated as unavailable"
+  ],
+  "counts": {
+    "previous": 1568,
+    "next": 1568,
+    "changeRate": 0
+  },
+  "snapshotHash": "bdf3fc5b671e88232bffeba1f3a0f765c0357b305104c9586a5518fbd6ad449b"
+}

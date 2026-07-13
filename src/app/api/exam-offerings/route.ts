@@ -6,7 +6,7 @@ import { findNetworkRatio } from "@/lib/network-ratios";
 import { findBackgroundReputation } from "@/lib/background-reputation";
 import { getSchoolTier } from "@/lib/school-tiers";
 import { findRetestLine, getNationalRetestLine } from "@/lib/retest-lines";
-import { scoreOffering } from "@/lib/recommendation";
+import { buildResultVersion, scoreOffering, selectTrustedTopTen, sha256 } from "@/lib/recommendation";
 import type { MajorOffering } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +25,8 @@ export async function GET(request: Request) {
         const english = url.searchParams.get("english") ?? "全部";
         const math = url.searchParams.get("math") ?? "全部";
         const schoolTier = url.searchParams.get("schoolTier") ?? "全部";
-        const background = url.searchParams.get("background") ?? "全部";
+        const degreeType = url.searchParams.get("degreeType") ?? "全部";
+        const studyMode = url.searchParams.get("studyMode") ?? "全部";
         const maxRetestLine = Number(
           url.searchParams.get("maxRetestLine") ?? "0",
         );
@@ -69,10 +70,20 @@ export async function GET(request: Request) {
             item.plannedEnrollment,
           );
           const enrollment2027 = item.enrollment2027 ?? null;
+          const lineScope = retestLine?.kind === "专业线"
+            ? "professional" as const
+            : retestLine?.kind === "国家线兜底" ? "national" as const : "school" as const;
+          const isGeneralExamPlan = item.plannedEnrollment.includes("不含推免");
+          const hasOfficialFirstChoiceCounts = networkRatio?.basis === "官方名单核算";
           const enrichedItem: MajorOffering = {
             ...item,
             enrollment2026,
             enrollment2027,
+            totalPlan2026: enrollment2026,
+            generalExamPlan2026: isGeneralExamPlan ? enrollment2026 : null,
+            firstChoiceRetestCount2026: hasOfficialFirstChoiceCounts ? networkRatio?.retestCount ?? null : null,
+            firstChoiceAdmittedCount2026: hasOfficialFirstChoiceCounts ? networkRatio?.admittedCount ?? null : null,
+            lineScope,
             enrollmentChange:
               enrollment2026 !== null && enrollment2027 !== null
                 ? enrollment2027 - enrollment2026
@@ -135,10 +146,8 @@ export async function GET(request: Request) {
                       !item.project211 &&
                       !item.doubleFirstClass),
           )
-          .filter(
-            (item) =>
-              background === "全部" || item.backgroundReputation === background,
-          )
+          .filter((item) => degreeType === "全部" || item.degreeType === degreeType)
+          .filter((item) => studyMode === "全部" || item.studyMode === studyMode)
           .filter((item) => {
             if (expansion === "全部") return true;
             if (expansion === "未公布") return item.enrollment2027 == null;
@@ -178,6 +187,17 @@ export async function GET(request: Request) {
                 b.enrollment2026! - a.enrollment2026!
               : a.schoolName.localeCompare(b.schoolName, "zh-CN"),
           );
+        const snapshotHash = sha256({
+          syncedAt: snapshot.syncedAt,
+          count: snapshot.count,
+          schoolCount: snapshot.schoolCount,
+          ids: snapshot.items.map((item) => item.id),
+        }).slice(0, 24);
+        const query = Object.fromEntries([...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b)));
+        const version = buildResultVersion({ snapshotHash, query });
+        const topTen = selectTrustedTopTen(filtered);
+        const pendingCandidates = filtered.filter((item) => item.recommendation.riskLevel === "pending").slice(0, 50);
+        const countLevel = (level: "reach" | "stable" | "safe") => topTen.filter((item) => item.recommendation.riskLevel === level).length;
         return NextResponse.json(
           {
             subjectCode: "408",
@@ -196,6 +216,21 @@ export async function GET(request: Request) {
             expectedScore,
             sort: sortMode,
             refreshing: snapshot.refreshing ?? false,
+            dataVersion: snapshot.syncedAt,
+            snapshotHash,
+            snapshotStatus: "verified",
+            algorithmVersion: version.algorithmVersion,
+            queryHash: version.queryHash,
+            resultKey: version.resultKey,
+            summary: {
+              trusted: topTen.length,
+              reach: countLevel("reach"),
+              stable: countLevel("stable"),
+              safe: countLevel("safe"),
+              pending: filtered.filter((item) => item.recommendation.riskLevel === "pending").length,
+            },
+            topTen,
+            pendingCandidates,
           },
           { headers: { "Cache-Control": "no-store" } },
         );
