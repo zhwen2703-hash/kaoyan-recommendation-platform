@@ -26,8 +26,8 @@ describe("recommendation scoring", () => {
       } as never,
       400,
     );
-    expect(result.recommendationScore).toBeLessThanOrEqual(49);
-    expect(result.riskLevel).toBe("冲");
+    expect(result.recommendation.trustedTopTenEligible).toBe(false);
+    expect(result.recommendation.riskLevel).toBe("pending");
     expect(result.recommendationConfidence).toBe("低");
   });
 });

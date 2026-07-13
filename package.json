@@ -10,6 +10,7 @@
     "test": "vitest run",
     "sync:data": "tsx scripts/sync-admission-units.ts",
     "sync:408": "tsx scripts/sync-408.ts"
+    ,"validate:snapshot": "tsx scripts/validate-snapshot.ts"
   },
   "dependencies": {
     "cheerio": "^1.2.0",

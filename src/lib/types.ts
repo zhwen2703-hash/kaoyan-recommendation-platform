@@ -51,6 +51,15 @@ export type MajorOffering = {
   enrollment2026?: number | null;
   enrollment2027?: number | null;
   enrollmentChange?: number | null;
+  totalPlan2026?: number | null;
+  generalExamPlan2026?: number | null;
+  recommendedExempt2026?: number | null;
+  specialPlan2026?: number | null;
+  firstChoiceRetestCount2026?: number | null;
+  firstChoiceAdmittedCount2026?: number | null;
+  lineScope?: "professional" | "college" | "school" | "national";
+  admittedMinimum2026?: number | null;
+  admittedMedian2026?: number | null;
   retestAdmissionRatio2026?: number | null;
   retestAdmissionRatioSourceUrl?: string | null;
   retestRatioConfidence?: "高" | "中" | "低" | null;
@@ -68,6 +77,8 @@ export type MajorOffering = {
   riskLevel?: "冲" | "稳" | "保";
   recommendationReasons?: string[];
   recommendationConfidence?: "高" | "中" | "低";
+  recommendation?: import("./recommendation/types").RecommendationScore;
+  recommendationReasonsDetailed?: import("./recommendation/types").TraceableReason[];
   graduateSchool?: boolean;
   selfMarking?: boolean;
   doubleFirstClass?: boolean;
