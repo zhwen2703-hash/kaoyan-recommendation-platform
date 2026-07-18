@@ -6,8 +6,8 @@
   ],
   "counts": {
     "previous": 1572,
-    "next": 1572,
-    "changeRate": 0
+    "next": 1574,
+    "changeRate": 0.001272264631043257
   },
-  "snapshotHash": "5706d95d9d68ff928105b109f3ba6fd51ba5b159efcf78ab00a9caa445f14409"
+  "snapshotHash": "a6120eabf9ed78f57751030119b5295b8d28be1a9ed2ddae6c5a92d8a7641400"
 }
