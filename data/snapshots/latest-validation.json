@@ -2,12 +2,12 @@
   "publishable": true,
   "errors": [],
   "warnings": [
-    "4 published plan values are nonpositive and will be treated as unavailable"
+    "5 published plan values are nonpositive and will be treated as unavailable"
   ],
   "counts": {
-    "previous": 1254,
-    "next": 1459,
-    "changeRate": 0.1634768740031898
+    "previous": 1459,
+    "next": 1557,
+    "changeRate": 0.06716929403701165
   },
-  "snapshotHash": "219d6bcb082c583eeac6b928022933063b44b65f77633a5f197bfd7474704749"
+  "snapshotHash": "8a31eb827f40b567f5faaa15ff974fcba3015c85b0d68a2db91ada0dccd52d49"
 }
