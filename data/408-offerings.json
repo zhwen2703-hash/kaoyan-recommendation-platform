@@ -1,7 +1,7 @@
 {
   "source": "中国研究生招生信息网 2026 年硕士专业目录",
   "sourceUrl": "https://yz.chsi.com.cn/zsml/",
-  "syncedAt": "2026-09-03T04:54:30.426Z",
+  "syncedAt": "2026-09-03T11:38:31.119Z",
   "subjectCode": "408",
   "coverage": "939 个招生单位逐校核验，第四科代码严格等于 408",
   "coveredMajors": [
@@ -46,7 +46,7 @@
       "name": "智能科学与技术"
     }
   ],
-  "count": 1571,
+  "count": 1570,
   "schoolCount": 389,
   "items": [
     {
@@ -16238,44 +16238,6 @@
       "sourceUrl": "https://yz.chsi.com.cn/zsml/"
     },
     {
-      "id": "c3021a0aa85c4c9210717c72d1db7fad",
-      "schoolCode": "11832",
-      "schoolName": "河北经贸大学",
-      "region": "河北",
-      "collegeName": "管理科学与信息工程学院",
-      "majorCode": "085404",
-      "majorName": "计算机技术",
-      "degreeType": "专业学位",
-      "directionName": "大数据应用技术、软件工程与服务计算、图像分析与模式识别",
-      "studyMode": "全日制",
-      "plannedEnrollment": "专业：32(不含推免)",
-      "subjects": [
-        {
-          "code": "101",
-          "name": "思想政治理论"
-        },
-        {
-          "code": "204",
-          "name": "英语（二）"
-        },
-        {
-          "code": "302",
-          "name": "数学（二）"
-        },
-        {
-          "code": "408",
-          "name": "计算机学科专业基础"
-        }
-      ],
-      "examType": "408",
-      "enrollment2026": 32,
-      "enrollment2027": null,
-      "enrollmentChange": null,
-      "retestAdmissionRatio2026": null,
-      "retestAdmissionRatioSourceUrl": null,
-      "sourceUrl": "https://yz.chsi.com.cn/zsml/"
-    },
-    {
       "id": "e266f2d26094ca8311ebce139f6bb281",
       "schoolCode": "10082",
       "schoolName": "河北科技大学",
@@ -24826,6 +24788,82 @@
       "sourceUrl": "https://yz.chsi.com.cn/zsml/"
     },
     {
+      "id": "cd7909f0d58a8331df53535c152361bd",
+      "schoolCode": "10299",
+      "schoolName": "江苏大学",
+      "region": "江苏",
+      "collegeName": "计算机科学与通信工程学院",
+      "majorCode": "085404",
+      "majorName": "计算机技术",
+      "degreeType": "专业学位",
+      "directionName": "计算机技术",
+      "studyMode": "全日制",
+      "plannedEnrollment": "专业：72(不含推免)",
+      "subjects": [
+        {
+          "code": "101",
+          "name": "思想政治理论"
+        },
+        {
+          "code": "204",
+          "name": "英语（二）"
+        },
+        {
+          "code": "302",
+          "name": "数学（二）"
+        },
+        {
+          "code": "408",
+          "name": "计算机学科专业基础"
+        }
+      ],
+      "examType": "408",
+      "enrollment2026": 72,
+      "enrollment2027": null,
+      "enrollmentChange": null,
+      "retestAdmissionRatio2026": null,
+      "retestAdmissionRatioSourceUrl": null,
+      "sourceUrl": "https://yz.chsi.com.cn/zsml/"
+    },
+    {
+      "id": "374db236a23484f33ad5615d374be58e",
+      "schoolCode": "10299",
+      "schoolName": "江苏大学",
+      "region": "江苏",
+      "collegeName": "计算机科学与通信工程学院",
+      "majorCode": "085404",
+      "majorName": "计算机技术",
+      "degreeType": "专业学位",
+      "directionName": "计算机技术",
+      "studyMode": "非全日制",
+      "plannedEnrollment": "专业：10(不含推免)",
+      "subjects": [
+        {
+          "code": "101",
+          "name": "思想政治理论"
+        },
+        {
+          "code": "204",
+          "name": "英语（二）"
+        },
+        {
+          "code": "302",
+          "name": "数学（二）"
+        },
+        {
+          "code": "408",
+          "name": "计算机学科专业基础"
+        }
+      ],
+      "examType": "408",
+      "enrollment2026": 10,
+      "enrollment2027": null,
+      "enrollmentChange": null,
+      "retestAdmissionRatio2026": null,
+      "retestAdmissionRatioSourceUrl": null,
+      "sourceUrl": "https://yz.chsi.com.cn/zsml/"
+    },
+    {
       "id": "b5d2d77299533660b0ccbe0701f1ec20",
       "schoolCode": "10299",
       "schoolName": "江苏大学",
@@ -26301,6 +26339,44 @@
       ],
       "examType": "408",
       "enrollment2026": 1,
+      "enrollment2027": null,
+      "enrollmentChange": null,
+      "retestAdmissionRatio2026": null,
+      "retestAdmissionRatioSourceUrl": null,
+      "sourceUrl": "https://yz.chsi.com.cn/zsml/"
+    },
+    {
+      "id": "4e4ef845a18327b10d8a81f210e442dd",
+      "schoolCode": "10412",
+      "schoolName": "江西中医药大学",
+      "region": "江西",
+      "collegeName": "计算机学院",
+      "majorCode": "081200",
+      "majorName": "计算机科学与技术",
+      "degreeType": "学术学位",
+      "directionName": "中医药信息学、健康大数据与人工智能、计算机应用技术",
+      "studyMode": "全日制",
+      "plannedEnrollment": "专业：17(不含推免)",
+      "subjects": [
+        {
+          "code": "101",
+          "name": "思想政治理论"
+        },
+        {
+          "code": "201",
+          "name": "英语（一）"
+        },
+        {
+          "code": "301",
+          "name": "数学（一）"
+        },
+        {
+          "code": "408",
+          "name": "计算机学科专业基础"
+        }
+      ],
+      "examType": "408",
+      "enrollment2026": 17,
       "enrollment2027": null,
       "enrollmentChange": null,
       "retestAdmissionRatio2026": null,
@@ -31545,44 +31621,6 @@
       ],
       "examType": "408",
       "enrollment2026": 9,
-      "enrollment2027": null,
-      "enrollmentChange": null,
-      "retestAdmissionRatio2026": null,
-      "retestAdmissionRatioSourceUrl": null,
-      "sourceUrl": "https://yz.chsi.com.cn/zsml/"
-    },
-    {
-      "id": "198f117d6628dd9569d29c0efe3c9102",
-      "schoolCode": "10300",
-      "schoolName": "南京信息工程大学",
-      "region": "江苏",
-      "collegeName": "计算机学院、网络空间安全学院",
-      "majorCode": "085412",
-      "majorName": "网络与信息安全",
-      "degreeType": "专业学位",
-      "directionName": "不区分研究方向",
-      "studyMode": "全日制",
-      "plannedEnrollment": "专业：60(不含推免)",
-      "subjects": [
-        {
-          "code": "101",
-          "name": "思想政治理论"
-        },
-        {
-          "code": "204",
-          "name": "英语（二）"
-        },
-        {
-          "code": "302",
-          "name": "数学（二）"
-        },
-        {
-          "code": "408",
-          "name": "计算机学科专业基础"
-        }
-      ],
-      "examType": "408",
-      "enrollment2026": 60,
       "enrollment2027": null,
       "enrollmentChange": null,
       "retestAdmissionRatio2026": null,
@@ -45179,82 +45217,6 @@
         {
           "code": "301",
           "name": "数学（一）"
-        },
-        {
-          "code": "408",
-          "name": "计算机学科专业基础"
-        }
-      ],
-      "examType": "408",
-      "enrollment2026": null,
-      "enrollment2027": null,
-      "enrollmentChange": null,
-      "retestAdmissionRatio2026": null,
-      "retestAdmissionRatioSourceUrl": null,
-      "sourceUrl": "https://yz.chsi.com.cn/zsml/"
-    },
-    {
-      "id": "fa7e8039dbf7bc996e03e1e78eec6b96",
-      "schoolCode": "92034",
-      "schoolName": "网络空间部队信息工程大学",
-      "region": "河南",
-      "collegeName": "不区分院系所",
-      "majorCode": "085400",
-      "majorName": "电子信息",
-      "degreeType": "专业学位",
-      "directionName": "计算机技术、软件工程（大数据工程、安全软件工程）",
-      "studyMode": "全日制",
-      "plannedEnrollment": "一级学科：53(不含推免)",
-      "subjects": [
-        {
-          "code": "101",
-          "name": "思想政治理论"
-        },
-        {
-          "code": "204",
-          "name": "英语（二）"
-        },
-        {
-          "code": "302",
-          "name": "数学（二）"
-        },
-        {
-          "code": "408",
-          "name": "计算机学科专业基础"
-        }
-      ],
-      "examType": "408",
-      "enrollment2026": null,
-      "enrollment2027": null,
-      "enrollmentChange": null,
-      "retestAdmissionRatio2026": null,
-      "retestAdmissionRatioSourceUrl": null,
-      "sourceUrl": "https://yz.chsi.com.cn/zsml/"
-    },
-    {
-      "id": "012d4abee45bd5cd3f6186d1b1f7a5e5",
-      "schoolCode": "92034",
-      "schoolName": "网络空间部队信息工程大学",
-      "region": "河南",
-      "collegeName": "不区分院系所",
-      "majorCode": "085400",
-      "majorName": "电子信息",
-      "degreeType": "专业学位",
-      "directionName": "计算机技术、软件工程（大数据工程、安全软件工程）",
-      "studyMode": "非全日制",
-      "plannedEnrollment": "一级学科：28(不含推免)",
-      "subjects": [
-        {
-          "code": "101",
-          "name": "思想政治理论"
-        },
-        {
-          "code": "204",
-          "name": "英语（二）"
-        },
-        {
-          "code": "302",
-          "name": "数学（二）"
         },
         {
           "code": "408",
